@@ -1,7 +1,7 @@
 '''
 
 Project: Chatting System
-Name: Mohak Bhalla
+Made by: Mohak Bhalla
 '''
 
 import pyrebase
@@ -12,9 +12,9 @@ import threading
 
 config = {
   "apiKey": "apiKey",
-  "authDomain": "chatting-system-57f73-default-rtdb.firebaseapp.com",
-  "databaseURL": "https://chatting-system-57f73-default-rtdb.firebaseio.com",
-  "storageBucket": "chatting-system-57f73-default-rtdb.appspot.com"
+  "authDomain": "ENTER YOUR DOMIAN NAME HERE",
+  "databaseURL": "ENTER YOUR DATABASE URL HERE",
+  "storageBucket": "ENTER YOUR DOMIAN NAME HERE"
 }
 
 firebase = pyrebase.initialize_app(config)
@@ -79,20 +79,6 @@ def closeMP():
     sleep(4)
     sys.exit()
 
-#Live chat function
-def stream_handler(message):
-    #print(message["path"])
-    info=message["data"]
-    print("")
-    for sender in info:
-        msg=info[sender]
-        if msg[1]=="0":
-            print(sender)
-            print(msg[0])
-            print("")
-            msg[1]="1";
-            #db.child("Message Data/"+userid+"/"+friend).update({msg.key(): msg.val()})
-
 #Message function
 def msg_sys(userid):
     while(1):
@@ -119,7 +105,6 @@ def msg_sys(userid):
             print("")
             if ch=='Y' or ch=='y':
                 c=0
-                #c= received_msgs(userid, friend);
                 if userid in db.child("Message Data").get().val() and friend in db.child("Message Data/"+userid).get().val():
                     dataf = db.child("Message Data/"+userid+"/"+friend).get()
                     for msg in dataf.each():
@@ -135,15 +120,7 @@ def msg_sys(userid):
             print("Enter 'EXIT' to exit")
             print("Start typing...")
             print("")
-            '''
-            t1= threading.Thread(target = send_msgs, args=(userid, friend,))
-            t2= threading.Thread(target = receive_stream, args=(userid, friend,))
-
-            t2.start()
-            t1.start()
-
-            if t1.join():
-                t2.stop()'''
+            
             msg=''
             while(msg != 'EXIT'):
                 msg=input()
@@ -160,45 +137,6 @@ def msg_sys(userid):
                     address="Message Data/"+friend+"/"+userid
                     db.child(address).update(temp)          #Updating friend data
 
-'''def send_msgs(userid, friend):
-    msg=''
-    while(msg != 'EXIT'):
-        msg=input()
-        if msg != 'EXIT' and msg != ' ':
-            t=strftime("(%d-%m-%y,%H:%M:%S)", localtime())
-            key=t+userid
-            value={0:msg, 1:"-"}
-            temp={key:value}
-            address="Message Data/"+userid+"/"+friend
-            db.child(address).update(temp)          #Updating user data
-
-            value={0:msg, 1:"0"}
-            temp={key:value}
-            address="Message Data/"+friend+"/"+userid
-            db.child(address).update(temp)          #Updating friend data
-
-
-#Received message interrupt function
-def receive_stream(userid, friend):
-    while(1):
-        my_stream = db.child("Message Data/"+userid+"/"+friend).stream(stream_handler)
-    my_steam.close()
-
-    
-def received_msgs(userid, friend):
-    c=0
-    if userid in db.child("Message Data").get().val() and friend in db.child("Message Data/"+userid).get().val():
-        dataf = db.child("Message Data/"+userid+"/"+friend).get()
-        for msg in dataf.each():
-            if(msg.val()[1]=="0"):
-                c+=1
-                print(msg.key())
-                print(msg.val()[0])
-                msg.val()[1]="1"
-                db.child("Message Data/"+userid+"/"+friend).update({msg.key(): msg.val()})
-    return c
-'''
-    
 #Update password function
 def updatepsw(userid):
     sleep(3)
@@ -214,6 +152,7 @@ def updatepsw(userid):
             flag=1
     db.child("Login Data").update(userdata)
     print("\nPassword updated successfully.")
+    
     
 #MainLogic
 while(1):
